@@ -1,11 +1,11 @@
 import { conectaApi } from "./conectaApi.js";
-import constroiCard from "../mostrarVideos.js";
+import constroiCard from "./mostrarVideos.js";
 
 async function buscarVideo(evento) {
     evento.preventDefault();
     const dadosDePesquisa = document.querySelector("[data-pesquisa]").value;
-    const busca = await conectaApi.buscarVideo(dadosDePesquisa);
-    
+    const busca = await conectaApi.buscaVideo(dadosDePesquisa);
+
     const lista = document.querySelector("[data-lista]");
 
     while (lista.firstChild) {
@@ -13,10 +13,13 @@ async function buscarVideo(evento) {
     }
 
     busca.forEach(elemento => lista.appendChild(
-        constroiCard(elemento.titulo, elemento.descricao, elemento.url, elemento.imagem)));
+        constroiCard(elemento.titulo, elemento.descricao, elemento.url, elemento.imagem)))
 
+    if (busca.length == 0) {
+        lista.innerHTML = `<h2 class="mensagem__titulo">Não existem vídeos com esse termo</h2>`
+    }
 }
 
 const botaoDePesquisa = document.querySelector("[data-botao-pesquisa]");
 
-botaoDePesquisa.addEventListener("click", evento => buscarVideo(evento));
+botaoDePesquisa.addEventListener("click", evento => buscarVideo(evento))
